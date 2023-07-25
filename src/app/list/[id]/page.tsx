@@ -1,4 +1,4 @@
-import DetailData from "../_components/DetailData";
+import DetailData from "../_components/List";
 
 import { Metadata, ResolvingMetadata } from "next";
 

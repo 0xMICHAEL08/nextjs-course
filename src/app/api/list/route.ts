@@ -1,21 +1,31 @@
-import { NextResponse } from "next/server";
+import { prisma } from "@/db";
+import { NextRequest, NextResponse } from "next/server";
 
-export const GET = (req: Request) => {
-  const { searchParams } = new URL(req.url); // 处理 URL 中的查询参数
+export const GET = async () => {
+  // 查询数据，根据创建时间倒序排列
+  const data = await prisma.goods.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
   return NextResponse.json({
     success: "true",
     errorMessage: "获取数据成功",
-    // fromEntries 方法将key-value数据转换为普通JS对象
-    data: Object.fromEntries(searchParams),
+    data,
   });
 };
 
-export const POST = async (req: Request) => {
-  const data = await req.json();
+export const POST = async (req: NextRequest) => {
+  const data = await req.json(); // 获取请求体中传递的json数据
+
+  await prisma.goods.create({
+    data,
+  });
+
   return NextResponse.json({
     success: "true",
-    errorMessage: "新增数据成功",
-    data,
+    errorMessage: "创建数据成功",
+    data: {},
   });
 };
